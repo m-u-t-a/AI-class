@@ -57,19 +57,20 @@ fields = giga.chat(prompt_fields).choices[0].message.content
 
 full_appeal = giga.chat(prompt_full_appeal).choices[0].message.content
 
-appeal_text = fields + '  \n' + full_appeal
+def extract_fields(fields, full_appeal):
+    new = fields.split(sep='  \n', maxsplit=-1)
+    pattern = r":\s*(.*)"
 
-new = appeal_text.split(sep='  \n', maxsplit=-1)
-pattern = r":\s*(.*)"
+    result = {}
+    for item in new:
+        match = re.search(pattern, item)
+        if match:
+            key = item.split(':')[0].strip()
+            value = match.group(1).strip()
+            result[key] = value
 
-result = {}
-for item in new:
-    match = re.search(pattern, item)
-    if match:
-        key = item.split(':')[0].strip()
-        value = match.group(1).strip()
-        result[key] = value
+    key2, value2 = full_appeal.split(sep=': ', maxsplit=--1)
+    result[key2] = value2
+    return result
 
-print(result)
-
-
+print(extract_fields(fields, full_appeal))
