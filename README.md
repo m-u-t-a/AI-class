@@ -6,6 +6,7 @@ Tool for civil requests to administration/government
 ### Kit:
 1) GigaChat от Сбера.
 2) Python (IDE PyCharm).
+3) Оригинальная модель "ruRoberta-Large" с HuggingFace by SberDevices: https://huggingface.co/ai-forever/ruRoberta-large.
 
 ---
 # Current task:
@@ -22,3 +23,4 @@ Tool for civil requests to administration/government
  сервер и писать весь обвес.
  ---
 Документация для GigaChat: https://developers.sber.ru/docs/ru/gigachat/api/overview.
+Профиль команды на HuggingFace с обученными моделями и используемыми датасетами: https://huggingface.co/SidorCrew.
