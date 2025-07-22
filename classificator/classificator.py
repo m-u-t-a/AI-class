@@ -35,11 +35,7 @@ def predict(text):
     for index, value in np.ndenumerate(predicted_clases):
         if (index != max_index) and ((max_val - value) <= 0.2):
             indexes.append(int(index[0]))
-    print(probs)
     if len(indexes) == 1:
         return classes[indexes[0]]
     else:
         return classes[indexes[0]], classes[indexes[1]]
-
-app = gra.Interface(fn=predict, inputs="text", outputs="text")
-app.launch()
