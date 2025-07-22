@@ -5,8 +5,6 @@ from gigachat import GigaChat
 from dotenv import load_dotenv
 import re
 
-from appeal_card import AppealCard
-from classificator import Classificator
 import pdf_extractor
 
 
