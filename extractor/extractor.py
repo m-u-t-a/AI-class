@@ -3,6 +3,7 @@ import os
 from gigachat import GigaChat
 import pdfplumber
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 GIGACHAT_CREDENTIALS = os.getenv('GIGACHAT_CREDENTIALS')
@@ -56,5 +57,19 @@ fields = giga.chat(prompt_fields).choices[0].message.content
 
 full_appeal = giga.chat(prompt_full_appeal).choices[0].message.content
 
-print(fields)
-print(full_appeal)
+appeal_text = fields + '  \n' + full_appeal
+
+new = appeal_text.split(sep='  \n', maxsplit=-1)
+pattern = r":\s*(.*)"
+
+result = {}
+for item in new:
+    match = re.search(pattern, item)
+    if match:
+        key = item.split(':')[0].strip()
+        value = match.group(1).strip()
+        result[key] = value
+
+print(result)
+
+
