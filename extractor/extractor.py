@@ -4,6 +4,7 @@ from gigachat import GigaChat
 import pdfplumber
 from dotenv import load_dotenv
 import re
+from appeal_card import AppealCard  # Импорт конкретного класса
 
 load_dotenv()
 GIGACHAT_CREDENTIALS = os.getenv('GIGACHAT_CREDENTIALS')
@@ -70,4 +71,18 @@ for item in new:
         value = match.group(1).strip()
         result[key] = value
 
-print(result)
+appeal = AppealCard(
+    number=result.get('номер_обращения'),
+    date=result.get('дата_обращения'),
+    author=result.get('автор'),
+    email=result.get('email'),
+    telephone=result.get('телефон'),
+    city=result.get('населенный_пункт'),
+    address=result.get('адрес'),
+    social_status=result.get('социальное_положение'),
+    addressee=result.get('адресат'),
+    appeal_text=result.get('текст_обращения'),
+    category='не указана'
+)
+
+print(vars(appeal))
