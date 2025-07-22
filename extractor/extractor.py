@@ -71,5 +71,3 @@ for item in new:
         result[key] = value
 
 print(result)
-
-
