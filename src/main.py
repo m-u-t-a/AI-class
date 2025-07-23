@@ -1,22 +1,27 @@
-import extractor
 from classificator import Classificator
 from appeal_card import AppealCard
+from src.pdf_extractor import extract_text_from_pdf
+from src.extractor import extract_fields, extract_prompts, extract_full_appeal
 
-appeal_values = extractor.extract()
+APPEAL_PATH = "../data/appeals/МЭДО_1.pdf"
+text = extract_text_from_pdf(APPEAL_PATH)
+fields = extract_prompts(text)
+full_appeal = extract_full_appeal(text)
+full_fields = extract_fields(fields, full_appeal)
 
-_category = Classificator.predict(appeal_values.get('текст_обращения'))
+_category = Classificator.predict(full_fields.get('текст_обращения'))
 
 appeal = AppealCard(
-    number=appeal_values.get('номер_обращения'),
-    date=appeal_values.get('дата_обращения'),
-    author=appeal_values.get('автор'),
-    email=appeal_values.get('email'),
-    telephone=appeal_values.get('телефон'),
-    city=appeal_values.get('населенный_пункт'),
-    address=appeal_values.get('адрес'),
-    social_status=appeal_values.get('социальное_положение'),
-    addressee=appeal_values.get('адресат'),
-    appeal_text=appeal_values.get('текст_обращения'),
+    number=full_fields.get('номер_обращения'),
+    date=full_fields.get('дата_обращения'),
+    author=full_fields.get('автор'),
+    email=full_fields.get('email'),
+    telephone=full_fields.get('телефон'),
+    city=full_fields.get('населенный_пункт'),
+    address=full_fields.get('адрес'),
+    social_status=full_fields.get('социальное_положение'),
+    addressee=full_fields.get('адресат'),
+    appeal_text=full_fields.get('текст_обращения'),
     category=_category
 )
 

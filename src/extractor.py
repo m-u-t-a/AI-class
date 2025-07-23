@@ -1,22 +1,16 @@
 import os
 
 from gigachat import GigaChat
-
 from dotenv import load_dotenv
 import re
 
-import pdf_extractor
+load_dotenv()
+gigachat_credentials = os.getenv('GIGACHAT_CREDENTIALS')
+giga = GigaChat(
+    credentials=gigachat_credentials,
+    verify_ssl_certs=False)
 
-
-def extract():
-    load_dotenv()
-    GIGACHAT_CREDENTIALS = os.getenv('GIGACHAT_CREDENTIALS')
-
-    giga = GigaChat(
-        credentials=GIGACHAT_CREDENTIALS,
-        verify_ssl_certs=False)
-
-    appeal_path = "../data/appeals/МЭДО_1.pdf"
+def extract_prompts(text):
 
     prompt_fields = f"""
         "Ты - секретарь государственной организации, которому поступило обращение гражданина. Твоя задача:
@@ -27,7 +21,7 @@ def extract():
         автор (ФИО гражданина),
         email (если указан),
         телефон (если указан),
-        населенный_пункт (если указан),
+        населенный_пункт (если указан. название поля "населенный_пункт" пиши именно так и никак иначе),
         адрес (если указан),
         социальное_положение (если указано),
         адресат (кому направлено обращение. указать ФИО или организацию).
@@ -37,8 +31,13 @@ def extract():
         название поля: значение поля
         Не вставляй никаких лишних символов, сохраняй такой формат вывода.
         Предоставленный текст:
-        {pdf_extractor.extract_text_from_pdf(appeal_path)}
+        {text}
         """
+    fields = giga.chat(prompt_fields).choices[0].message.content
+    # print(fields)
+    return fields
+
+def extract_full_appeal(text):
 
     prompt_full_appeal = f"""
         "Ты - секретарь государственной организации, которому поступило обращение гражданина. Твоя задача:
@@ -50,12 +49,14 @@ def extract():
         текст_обращения: текст
         Не вставляй никаких лишних символов, сохраняй такой формат вывода.
         Предоставленный текст:
-        {pdf_extractor.extract_text_from_pdf(appeal_path)}
+        {text}
         """
-    fields = giga.chat(prompt_fields).choices[0].message.content
 
     full_appeal = giga.chat(prompt_full_appeal).choices[0].message.content
+    # print(full_appeal)
+    return full_appeal
 
+def extract_fields(fields, full_appeal):
     new = fields.split(sep='  \n', maxsplit=-1)
     pattern = r":\s*(.*)"
 
